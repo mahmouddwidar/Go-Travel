@@ -5,7 +5,10 @@ import Page from "./components/Page";
 import Header from "./components/Header";
 import Navigation from "./components/Navigation/Navigation";
 import Hero from "./components/Hero/Hero";
+
+// Main
 import Main from "./components/Main";
+import Steps from "./components/Steps/Steps";
 
 function App() {
   return (
@@ -15,7 +18,7 @@ function App() {
         <Hero />
       </Header>
       <Main>
-        
+        <Steps />
       </Main>
     </Page>
   );
