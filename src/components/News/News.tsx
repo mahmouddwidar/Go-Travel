@@ -11,7 +11,7 @@ export default function News() {
 
         <ul className="flex flex-col gap-y-34">
           {blogPosts.map((post) => (
-            <BlogPost post={post} />
+            <BlogPost post={post} key={post.id} />
           ))}
         </ul>
       </div>

@@ -1,5 +1,5 @@
 import { steps } from "../../utils/content";
-import swimmingDudes from "../../../public/swimmingDudes.webp";
+import swimmingDudes from "/swimmingDudes.webp";
 import Rating from "./Rating";
 
 export default function Steps() {

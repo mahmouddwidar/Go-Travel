@@ -12,7 +12,6 @@ export default function BlogPost({ post }: BlogPostProps) {
     <motion.li
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: imageLoaded ? 1 : 0, y: imageLoaded ? 0 : 20 }}
-      key={post.id}
       className="group flex cursor-pointer items-center justify-between gap-x-36"
     >
       <div className="overflow-hidden rounded-[1.5rem]">
