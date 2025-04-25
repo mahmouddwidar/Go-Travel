@@ -20,7 +20,7 @@ export default function ExploreMore() {
     setCurrentIndex((prevIndex) => prevIndex - 1);
   };
   return (
-    <section className="px-45.5 py-26">
+    <section className="px-45.5 py-26" id="ExploreMore">
       <div className="m-auto max-w-389">
         {/* Title and Arrows*/}
         <div className="flex items-end justify-between">
