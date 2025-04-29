@@ -1,6 +1,7 @@
 import { motion } from "motion/react";
 import { type BlogPost } from "../../utils/contentTypes";
 import { useState } from "react";
+import formatDate from "../../utils/FormatDate";
 
 interface BlogPostProps {
   post: BlogPost;
@@ -25,7 +26,7 @@ export default function BlogPost({ post }: BlogPostProps) {
 
       <div className="mr-11 max-w-195">
         <p className="tracking-6 mb-4.5 text-[1.25rem] font-medium text-gray-900">
-          {post.date}
+          {formatDate(post.date)}
         </p>
         <h4 className="tracking-6 mb-6 text-[2.75rem] font-medium">
           {post.title}
