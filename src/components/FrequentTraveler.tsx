@@ -2,6 +2,7 @@ import { useState, MouseEvent } from "react";
 import Checkmark from "./Icons/Checkmark";
 import { useFormAndValidation } from "../hooks/useFormAndValidation";
 import { AnimatePresence, motion } from "motion/react";
+import useInsertLead from "../hooks/useInsertLead";
 
 interface formState {
   currentState: "idle" | "pending" | "success" | "error";
@@ -23,17 +24,37 @@ export default function FrequentTraveler() {
     error: "bg-red opacity-100",
   };
 
+  const mutation = useInsertLead({
+    onSuccess: handleSuccess,
+    onError: handleError,
+  });
+
   function handleSubmit(e: MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
     if (isChecked && isValid) {
-      // we can submit the form.
-      setFormState({ currentState: "success", errorMessage: null });
-      setTimeout(
-        () => setFormState({ currentState: "idle", errorMessage: null }),
-        2000,
-      );
-      resetForm();
+      setFormState({ currentState: "pending", errorMessage: null });
+      mutation.mutate({
+        createdAt: Date.now(),
+        fullName: values.fullName,
+        emailAddress: values.emailAddress,
+      });
     }
+  }
+
+  function handleSuccess() {
+    resetForm();
+    setIsChecked(false);
+    setFormState({ currentState: "success", errorMessage: null });
+    setTimeout(() => {
+      setFormState({ currentState: "idle", errorMessage: null });
+    }, 1750);
+  }
+
+  function handleError(error: Error) {
+    setFormState({ currentState: "error", errorMessage: error.message });
+    setTimeout(() => {
+      setFormState({ currentState: "idle", errorMessage: null });
+    }, 3000);
   }
 
   return (
@@ -69,6 +90,7 @@ export default function FrequentTraveler() {
               maxLength={50}
               placeholder="Jane Doe"
               onChange={handleChange}
+              disabled={formState.currentState !== "idle"}
               value={values.fullName}
               className={`placeholder:text-grey-400 w-full rounded-lg bg-white py-3.5 pl-4 transition-all duration-200 placeholder:font-light focus:outline-1 disabled:opacity-50 ${errors.fullName && "outline-red"} `}
             />
@@ -98,6 +120,7 @@ export default function FrequentTraveler() {
               type="email"
               placeholder="janedoe@gmail.com"
               onChange={handleChange}
+              disabled={formState.currentState !== "idle"}
               value={values.emailAddress}
               className={`placeholder:text-grey-400 w-full rounded-lg bg-white py-3.5 pl-4 transition-all duration-200 placeholder:font-light focus:outline-1 disabled:opacity-50 ${errors.emailAddress && "outline-red"}`}
             />
@@ -123,6 +146,7 @@ export default function FrequentTraveler() {
                 className="flex size-5 cursor-pointer items-center justify-center rounded-xs bg-white p-1 disabled:opacity-50"
                 type="button"
                 onClick={() => setIsChecked(!isChecked)}
+                disabled={formState.currentState !== "idle"}
               >
                 <Checkmark
                   className={`size-2 transition-all duration-200 ${isChecked ? "visible size-3 opacity-100" : "invisible size-2 opacity-0"}`}
@@ -145,6 +169,20 @@ export default function FrequentTraveler() {
               {formState.currentState === "error" && "Submission Failed"}
             </button>
           </div>
+          {/* Error State */}
+          {formState.currentState === "error" && (
+            <AnimatePresence>
+              <motion.p
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.15 }}
+                className="text-red mt-5 rounded-xl bg-red-200 px-5 py-2.5 font-medium"
+              >
+                {formState.errorMessage}
+              </motion.p>
+            </AnimatePresence>
+          )}
         </form>
       </div>
     </section>
