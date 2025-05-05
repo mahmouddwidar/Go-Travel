@@ -20,28 +20,35 @@ import Footer from "./components/Footer";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
+// Mobile Menu
+import MobileMenu from "./components/Navigation/MobileMenu";
+import MenuContextProvider from "../context/MobileMenuContext";
+
 const queryClient = new QueryClient();
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <Page>
-        <Header>
-          <Navigation />
-          <Hero />
-        </Header>
-        <Main>
-          <Steps />
-          <Services />
-          <News />
-          <ExploreMore />
-          <FrequentTraveler />
-          <Testimonials />
-        </Main>
-        <Footer />
-      </Page>
-      <ReactQueryDevtools />
-    </QueryClientProvider>
+    <MenuContextProvider>
+      <QueryClientProvider client={queryClient}>
+        <Page>
+          <Header>
+            <Navigation />
+            <Hero />
+            <MobileMenu />
+          </Header>
+          <Main>
+            <Steps />
+            <Services />
+            <News />
+            <ExploreMore />
+            <FrequentTraveler />
+            <Testimonials />
+          </Main>
+          <Footer />
+        </Page>
+        <ReactQueryDevtools />
+      </QueryClientProvider>
+    </MenuContextProvider>
   );
 }
 
