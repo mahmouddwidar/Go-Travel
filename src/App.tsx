@@ -23,10 +23,19 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 // Mobile Menu
 import MobileMenu from "./components/Navigation/MobileMenu";
 import MenuContextProvider from "../context/MobileMenuContext";
+import { useEffect } from "react";
+
+// Google Analytics
+import { initGoogleAnalytics, logPageView } from "./components/analytics";
 
 const queryClient = new QueryClient();
 
 function App() {
+  useEffect(() => {
+    initGoogleAnalytics();
+    logPageView();
+  }, []);
+
   return (
     <MenuContextProvider>
       <QueryClientProvider client={queryClient}>

@@ -4,6 +4,7 @@ import { useFormAndValidation } from "../hooks/useFormAndValidation";
 import Checkmark from "./Icons/Checkmark";
 import useInsertLead from "../hooks/useInsertLead";
 import { FORM_STATE_DURATION } from "../utils/constants";
+import { logCustomEvent } from "./analytics";
 
 interface FormState {
   currentState: "idle" | "pending" | "success" | "error";
@@ -61,6 +62,7 @@ export default function FrequentTravelers() {
       () => setFormState({ currentState: "idle", errorMessage: null }),
       FORM_STATE_DURATION,
     );
+    logFormSubmit("null");
   }
 
   function handleError(error: Error) {
@@ -70,11 +72,23 @@ export default function FrequentTravelers() {
       () => setFormState({ currentState: "idle", errorMessage: null }),
       FORM_STATE_DURATION,
     );
+    logFormSubmit(`form submission error with message - ${error.message}`);
+  }
+
+  function logFormSubmit(error: string = "") {
+    logCustomEvent({
+      category: "user_engagement",
+      action: "form_submit",
+      eventName: "frequent_travelers_form_submit",
+      customProps: {
+        errorMessage: error,
+      },
+    });
   }
 
   return (
     <section className="bg-primary-100 max-3xl:px-20 max-3xl:py-34 px-24 py-36 max-2xl:px-14 max-2xl:py-28 max-xl:px-10 max-xl:py-26 max-lg:px-6 max-lg:pt-24 max-lg:pb-32 max-md:pb-28 max-sm:px-4">
-      <div className="border-y-grey-500/40 m-auto flex flex-col lg:flex-row max-w-389 items-center justify-between gap-x-28 border-y-1 py-26 max-2xl:gap-x-20 max-2xl:py-20 max-xl:gap-x-10 max-xl:py-16 max-lg:max-w-lg max-lg:flex-col max-lg:gap-y-16 max-lg:border-none max-lg:py-0">
+      <div className="border-y-grey-500/40 m-auto flex max-w-389 flex-col items-center justify-between gap-x-28 border-y-1 py-26 max-2xl:gap-x-20 max-2xl:py-20 max-xl:gap-x-10 max-xl:py-16 max-lg:max-w-lg max-lg:flex-col max-lg:gap-y-16 max-lg:border-none max-lg:py-0 lg:flex-row">
         <div className="basis-150 text-center max-lg:basis-auto">
           <h3 className="tracking-6 max-3xl:text-[1.5rem]/12 max-3xl:mb-8 mb-9.5 text-[1.75rem]/14 font-semibold max-md:mb-9.5">
             Learn About Our Frequent Traveler Program
